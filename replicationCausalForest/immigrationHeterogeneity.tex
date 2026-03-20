@@ -1,0 +1,71 @@
+\documentclass{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{lscape}
+\usepackage{natbib}
+
+\begin{document}
+
+\title{Your Title}
+\author{Your Name}
+\date{\today}
+
+\maketitle
+
+\section{Introduction}
+This is the introduction section of your paper.
+
+\citet{Oreopoulos2011}
+
+\section{Methodology}
+This is the methodology section of your paper.
+
+\section{Results}
+\subsection{Regression Results}
+\input{./results/tables/regressionTable.tex}
+
+\subsection{Causal Forest Results}
+In Figure \ref{fig:CATEs} we present effect sizes based on a causal forest procedure \citep{Atheyetal2019}.
+\begin{figure}[htpb!]
+  \centering
+  \includegraphics{./results/figures/treatmentCATEs.pdf}
+  \caption{Examining Treatment Effect Heterogeneity (Part I)}
+  \label{fig:CATEs}
+\end{figure}
+
+\begin{landscape}
+\begin{figure}[htpb!]
+  \includegraphics{./results/figures/orderedCATEs.pdf}
+  \caption{Examining Treatment Effect Heterogeneity (Part II)}
+  \label{fig:EffectOrdered}
+\end{figure}
+\end{landscape}
+
+\begin{figure}[htpb!]
+  \centering
+  \includegraphics{./results/figures/CATEbyGroup.pdf}
+  \caption{Distribution of Treatment Effects by BA Quality}
+  \label{fig:BAhet}
+\end{figure}
+
+\begin{figure}[htpb!]
+  \centering
+  \includegraphics[scale=0.7]{./results/figures/SHAPvalues.pdf}
+  \caption{Examining relevant predictors}
+  \label{fig:SHAP}
+\end{figure}
+
+
+\section{Conclusion}
+This is the conclusion section of your paper.
+
+
+\clearpage
+\bibliographystyle{apalike}
+\bibliography{refs}
+
+
+\end{document}
