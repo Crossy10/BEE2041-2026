@@ -51,9 +51,12 @@ print(gdp_raw.head())
 # Aggregates have an 'aggregate' flag in the economy metadata.
 
 economy_meta = wb.economy.DataFrame()           
-true_countries = economy_meta[economy_meta["aggregate"] == False].index.tolist()
+print(economy_meta)
 
-print(f"Total economies in WB: {len(economy_meta)}")
+true_countries = economy_meta[economy_meta["aggregate"] == False].index.tolist()
+print(true_countries)
+
+print(f"\nTotal economies in WB: {len(economy_meta)}")
 print(f"True countries:        {len(true_countries)}")
 
 def keep_countries(df):
@@ -62,7 +65,7 @@ def keep_countries(df):
 gdp = keep_countries(gdp_raw).copy()
 imr = keep_countries(imr_raw).copy()
 
-print(f"GDP after filter: {gdp.shape}")
+print(f"\nGDP after filter: {gdp.shape}")
 print(f"IMR after filter: {imr.shape}")
 
 # --------------------------------------------------------------------------------
@@ -79,7 +82,7 @@ gdp = gdp.rename(columns={c: c + "_gdp" for c in gdp_year_cols})
 imr = imr.rename(columns={c: c + "_imr" for c in imr_year_cols})
 
 # --- Diagnostic checks BEFORE merging ---
-print("---------- Merge diagnostics (wide format) ----------")
+print("\n\n---------- Merge diagnostics (wide format) ----------")
 print("Unique countries in GDP:", gdp.index.nunique())
 print("Unique countries in IMR:", imr.index.nunique())
 
@@ -102,7 +105,7 @@ wide = pd.merge(gdp, imr, left_index=True, right_index=True, how="outer", valida
 wide = wide.drop(columns="Country_y")
 wide = wide.rename(columns={"Country_x": "Country"})
 
-# Option 3 (join with key):
+# Option 3 (join with key): (probs the cleanest way to do this)
 #wide = pd.merge(
 #    gdp,
 #    imr.drop(columns="Country"),
@@ -111,7 +114,7 @@ wide = wide.rename(columns={"Country_x": "Country"})
 #    validate="1:1"
 #)
 
-print(f"Merged wide shape: {wide.shape}")
+print(f"\nMerged wide shape: {wide.shape}")
 print(wide.head())
 
 # --------------------------------------------------------------------------------
@@ -175,10 +178,10 @@ def wide_to_long(df, value_col, suffix):
 gdp_long = wide_to_long(gdp, "gdp_pc", "gdp")
 imr_long = wide_to_long(imr, "imr",    "imr")
 
-print("------ Long format ------")
+print("\n\n------ Long format ------")
 print("GDP long shape:", gdp_long.shape)
 print(gdp_long.head())
-print("IMR long shape:", imr_long.shape)
+print("\nIMR long shape:", imr_long.shape)
 print(imr_long.head())
 
 # --------------------------------------------------------------------------------
@@ -186,7 +189,7 @@ print(imr_long.head())
 # --------------------------------------------------------------------------------
 # Key: (code, year) — both datasets must have the same granularity.
 
-print("------ Long-format merge diagnostics ------")
+print("\n\n------ Long-format merge diagnostics ------")
 print("GDP long - unique (code, year):", gdp_long[["code","year"]].drop_duplicates().shape[0])
 print("IMR long - unique (code, year):", imr_long[["code","year"]].drop_duplicates().shape[0])
 
@@ -203,11 +206,11 @@ long = pd.merge(
     indicator=True           # adds _merge column for diagnostics
 )
 
-print("Merge indicator summary:")
+print("\n\nMerge indicator summary:")
 print(long["_merge"].value_counts())
 long.drop(columns="_merge", inplace=True)
 
-print(f"Final long shape: {long.shape}")
+print(f"Final long shape: {long.shape}\n\n")
 print(long.head())
 
 # --------------------------------------------------------------------------------
